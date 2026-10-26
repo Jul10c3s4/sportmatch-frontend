@@ -9,6 +9,7 @@ const navigation = [
   { label: "Home", href: "/", icon: "home" },
   { label: "Pesquisar", href: "/pesquisa", icon: "search" },
   { label: "Nova Competição", href: "/competicoes/nova", icon: "trophy" },
+  { label: "Novo Espaço", href: "/espacos/novo", icon: "trophy" },
   { label: "Notificações", href: "/notificacoes", icon: "bell" },
   { label: "Perfil", href: "/perfil", icon: "user" },
 ];
