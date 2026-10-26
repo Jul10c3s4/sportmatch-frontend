@@ -58,6 +58,10 @@ function Icon({ name }: { name: string }) {
 export function Sidebar() {
   const pathname = usePathname();
 
+  if (pathname === "/" || pathname === "/cadastro" || pathname === "/login") {
+    return null;
+  }
+
   return (
     <aside className="flex w-[240px] flex-col justify-between border-r border-[#dfe3e8] bg-[#f7f7f8] px-4 py-5">
       <div>
