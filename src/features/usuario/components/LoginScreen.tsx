@@ -10,7 +10,7 @@ export function LoginScreen() {
         className="flex min-h-[240px] flex-col items-center justify-center bg-white px-6 py-10 md:min-h-screen"
       >
         <Image
-          src="Logo.svg"//"/Logo%20Container.svg"
+          src="logo_sportmatch.svg"
           alt="SportMatch"
           width={184}
           height={52}
