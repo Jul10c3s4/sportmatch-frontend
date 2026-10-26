@@ -11,14 +11,8 @@ type AppShellProps = {
 
 export function AppShell({ children }: AppShellProps) {
   const pathname = usePathname();
-<<<<<<< HEAD
 
   if (pathname === "/") {
-=======
-  const isAuthenticationRoute = pathname === "/" || pathname === "/login" || pathname === "/cadastro";
-
-  if (isAuthenticationRoute) {
->>>>>>> ec0f525a981f6f5f11b189629feab9126b09e577
     return children;
   }
 
@@ -28,8 +22,4 @@ export function AppShell({ children }: AppShellProps) {
       <div className="flex-1">{children}</div>
     </div>
   );
-<<<<<<< HEAD
 }
-=======
-}
->>>>>>> ec0f525a981f6f5f11b189629feab9126b09e577

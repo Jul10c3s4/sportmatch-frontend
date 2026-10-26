@@ -3,8 +3,10 @@
 import { zodResolver } from "@hookform/resolvers/zod";
 import type { FormEventHandler } from "react";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { useForm, type UseFormReturn } from "react-hook-form";
 
+import { autenticarUsuarioMock } from "@/features/usuario/services/login.service";
 import {
   loginSchema,
   type LoginFormValues,
@@ -16,11 +18,11 @@ type UseLoginResult = {
   senhaVisivel: boolean;
   status: string;
   alternarVisibilidadeSenha: () => void;
-  avisarCadastroIndisponivel: () => void;
   avisarRecuperacaoIndisponivel: () => void;
 };
 
 export function useLogin(): UseLoginResult {
+  const router = useRouter();
   const [senhaVisivel, setSenhaVisivel] = useState(false);
   const [status, setStatus] = useState("");
   const form = useForm<LoginFormValues>({
@@ -33,8 +35,16 @@ export function useLogin(): UseLoginResult {
     },
   });
 
-  const onSubmit = form.handleSubmit(() => {
-    setStatus("A autenticação ainda não está conectada.");
+  const onSubmit = form.handleSubmit((values) => {
+    try {
+      autenticarUsuarioMock(values);
+      router.push("/dashboard");
+    } catch (error: unknown) {
+      const message =
+        error instanceof Error ? error.message : "Não foi possível entrar.";
+
+      form.setError("root", { message });
+    }
   });
 
   return {
@@ -43,8 +53,6 @@ export function useLogin(): UseLoginResult {
     senhaVisivel,
     status,
     alternarVisibilidadeSenha: () => setSenhaVisivel((visivel) => !visivel),
-    avisarCadastroIndisponivel: () =>
-      setStatus("O cadastro ainda não está disponível."),
     avisarRecuperacaoIndisponivel: () =>
       setStatus("A recuperação de senha ainda não está disponível."),
   };
