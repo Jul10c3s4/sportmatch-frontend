@@ -1,7 +1,10 @@
 "use client";
 
+import Link from "next/link";
+
 import { LoginFields } from "@/features/usuario/components/LoginFields";
 import { useLogin } from "@/features/usuario/hooks/useLogin";
+import { credenciaisDemo } from "@/features/usuario/services/login.service";
 
 export function LoginForm() {
   const {
@@ -10,10 +13,9 @@ export function LoginForm() {
     senhaVisivel,
     status,
     alternarVisibilidadeSenha,
-    avisarCadastroIndisponivel,
     avisarRecuperacaoIndisponivel,
   } = useLogin();
-  const { isSubmitting } = form.formState;
+  const { errors, isSubmitting } = form.formState;
 
   return (
     <section className="w-full max-w-[420px]">
@@ -23,8 +25,16 @@ export function LoginForm() {
       <p className="mt-2 text-sm text-[#405466]">
         aqui você encontra as melhores rachas na sua região
       </p>
+      <p className="mt-3 text-xs text-[#405466]">
+        Acesso de demonstração: {credenciaisDemo.email} / {credenciaisDemo.senha}
+      </p>
 
       <form className="mt-8 space-y-5" noValidate onSubmit={onSubmit}>
+        {errors.root ? (
+          <p role="alert" className="text-sm font-medium text-red-700">
+            {errors.root.message}
+          </p>
+        ) : null}
         <LoginFields
           form={form}
           senhaVisivel={senhaVisivel}
@@ -39,13 +49,12 @@ export function LoginForm() {
         >
           {isSubmitting ? "Validando..." : "Acessar"}
         </button>
-        <button
-          type="button"
-          onClick={avisarCadastroIndisponivel}
-          className="min-h-11 w-full rounded-md border border-slate-200 bg-white px-4 text-sm font-semibold text-[#252d34] transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a4a12] focus-visible:ring-offset-2"
+        <Link
+          href="/cadastro"
+          className="flex min-h-11 w-full items-center justify-center rounded-md border border-slate-200 bg-white px-4 text-sm font-semibold text-[#252d34] transition-colors hover:bg-slate-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#9a4a12] focus-visible:ring-offset-2"
         >
           Cadastrar
-        </button>
+        </Link>
         <p role="status" aria-live="polite" className="min-h-5 text-center text-sm text-[#173a55]">
           {status}
         </p>
