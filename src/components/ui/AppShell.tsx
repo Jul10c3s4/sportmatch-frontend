@@ -25,9 +25,9 @@ function PathnameShell({ children }: AppShellProps) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[1500px] bg-[#f4f5f7] shadow-[0_0_0_1px_rgba(15,23,42,0.04)]">
+    <div className="mx-auto flex min-h-screen max-w-[1500px] flex-col bg-[#f4f5f7] shadow-[0_0_0_1px_rgba(15,23,42,0.04)] md:flex-row">
       <Sidebar />
-      <div className="flex-1">{children}</div>
+      <div className="min-w-0 flex-1">{children}</div>
     </div>
   );
 }
