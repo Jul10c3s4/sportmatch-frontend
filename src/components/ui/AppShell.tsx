@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 import { Sidebar } from "@/components/ui/Sidebar";
@@ -10,6 +10,14 @@ type AppShellProps = {
 };
 
 export function AppShell({ children }: AppShellProps) {
+  return (
+    <Suspense fallback={children}>
+      <PathnameShell>{children}</PathnameShell>
+    </Suspense>
+  );
+}
+
+function PathnameShell({ children }: AppShellProps) {
   const pathname = usePathname();
 
   if (pathname === "/") {
@@ -17,9 +25,9 @@ export function AppShell({ children }: AppShellProps) {
   }
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-[1500px] bg-[#f4f5f7] shadow-[0_0_0_1px_rgba(15,23,42,0.04)]">
+    <div className="mx-auto flex min-h-screen max-w-[1500px] flex-col bg-[#f4f5f7] shadow-[0_0_0_1px_rgba(15,23,42,0.04)] md:flex-row">
       <Sidebar />
-      <div className="flex-1">{children}</div>
+      <div className="min-w-0 flex-1">{children}</div>
     </div>
   );
 }

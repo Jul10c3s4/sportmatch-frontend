@@ -6,10 +6,8 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navigation = [
-  { label: "Home", href: "/", icon: "home" },
+  { label: "Home", href: "/dashboard", icon: "home" },
   { label: "Pesquisar", href: "/pesquisa", icon: "search" },
-  { label: "Nova Competição", href: "/competicoes/nova", icon: "trophy" },
-  { label: "Novo Espaço", href: "/espacos/novo", icon: "trophy" },
   { label: "Notificações", href: "/notificacoes", icon: "bell" },
   { label: "Perfil", href: "/perfil", icon: "user" },
 ];
@@ -27,15 +25,6 @@ function Icon({ name }: { name: string }) {
       <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
         <circle cx="11" cy="11" r="5.5" />
         <path d="M16 16 21 21" />
-      </svg>
-    ),
-    trophy: (
-      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
-        <path d="M8 4h8v2a4 4 0 0 1-8 0V4Z" />
-        <path d="M8 4H5a1 1 0 0 0-1 1v1a4 4 0 0 0 4 4h1" />
-        <path d="M16 4h3a1 1 0 0 1 1 1v1a4 4 0 0 1-4 4h-1" />
-        <path d="M12 12v4" />
-        <path d="M9 20h6" />
       </svg>
     ),
     bell: (
@@ -63,34 +52,34 @@ export function Sidebar() {
   }
 
   return (
-    <aside className="flex w-[240px] flex-col justify-between border-r border-[#dfe3e8] bg-[#f7f7f8] px-4 py-5">
-      <div>
-        <div className="mb-8 flex items-center px-3">
+    <aside className="shrink-0 border-b border-[#e2e8f0] bg-white px-4 py-3 md:sticky md:top-0 md:h-screen md:w-[166px] md:border-b-0 md:border-r md:px-3.5 md:py-4">
+      <div className="flex items-center justify-between gap-4 md:block">
+        <Link href="/dashboard" aria-label="SportMatch - página inicial" className="inline-flex min-h-11 items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]">
           <Image
             src="/Logo%20Container.svg"
-            alt="Logo SportMatch"
+            alt="SportMatch"
             width={160}
             height={48}
             priority
-            className="h-12 w-auto"
+            className="h-9 w-auto md:h-8 md:max-w-[134px]"
           />
-        </div>
+        </Link>
 
-        <nav aria-label="Menu principal" className="space-y-2">
+        <nav aria-label="Menu principal" className="flex gap-1 overflow-x-auto md:mt-4 md:flex-col md:gap-1.5">
           {navigation.map(({ label, href, icon }) => {
-            const isActive = pathname === href || (href === "/competicoes/nova" && pathname.startsWith("/competicoes"));
+            const isActive = pathname === href || (href === "/dashboard" && pathname.startsWith("/dashboard"));
 
             return (
               <Link
                 key={label}
                 href={href}
                 className={[
-                  "flex w-full items-center gap-3 rounded-xl px-3 py-2.5 text-left text-base font-medium transition",
-                  isActive ? "bg-[#f2e1d3] text-[#1f2937] ring-1 ring-[#ecae78]" : "text-[#4a5565] hover:bg-[#eef2f4]",
+                  "flex min-h-11 shrink-0 items-center gap-2 rounded-lg px-2.5 text-sm font-medium transition focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] md:w-full",
+                  isActive ? "bg-[#fff7f2] text-[#9a3412]" : "text-[#0b2f4f] hover:bg-[#f1f5f9]",
                 ].join(" ")}
                 aria-current={isActive ? "page" : undefined}
               >
-                <span className={isActive ? "text-[#f39a4f]" : "text-[#5d6875]"}>
+                <span className={isActive ? "text-[#c2410c]" : "text-[#0b2f4f]"}>
                   <Icon name={icon} />
                 </span>
                 {label}
@@ -100,13 +89,13 @@ export function Sidebar() {
         </nav>
       </div>
 
-      <div className="flex items-center gap-3 rounded-xl bg-[#eef2f4] px-3 py-2.5">
-        <div className="flex h-9 w-9 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#f2d6b0,#8e5a2d)] text-sm font-semibold text-white">
+      <div className="mt-5 hidden items-center gap-2 md:flex">
+        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#f2d6b0,#8e5a2d)] text-xs font-semibold text-white">
           JS
         </div>
-        <div>
-          <p className="text-sm font-semibold text-[#1f2937]">João Silva</p>
-          <p className="text-xs text-[#6b7280]">Arapiraca, AL</p>
+        <div className="min-w-0">
+          <p className="truncate text-[10px] font-semibold text-[#0b2f4f]">João Silva</p>
+          <p className="truncate text-[9px] text-[#475569]">Arapiraca, AL</p>
         </div>
       </div>
     </aside>
