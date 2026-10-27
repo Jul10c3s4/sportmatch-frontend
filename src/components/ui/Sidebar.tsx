@@ -6,7 +6,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 
 const navigation = [
-  { label: "Home", href: "/", icon: "home" },
+  { label: "Home", href: "/dashboard", icon: "home" },
   { label: "Pesquisar", href: "/pesquisa", icon: "search" },
   { label: "Nova Competição", href: "/competicoes/nova", icon: "trophy" },
   { label: "Novo Espaço", href: "/espacos/novo", icon: "trophy" },
@@ -78,7 +78,7 @@ export function Sidebar() {
 
         <nav aria-label="Menu principal" className="space-y-2">
           {navigation.map(({ label, href, icon }) => {
-            const isActive = pathname === href || (href === "/competicoes/nova" && pathname.startsWith("/competicoes"));
+            const isActive = pathname === href || (href === "/dashboard" && pathname.startsWith("/dashboard"));
 
             return (
               <Link

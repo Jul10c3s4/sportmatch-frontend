@@ -1,6 +1,6 @@
 "use client";
 
-import type { ReactNode } from "react";
+import { Suspense, type ReactNode } from "react";
 import { usePathname } from "next/navigation";
 
 import { Sidebar } from "@/components/ui/Sidebar";
@@ -10,6 +10,14 @@ type AppShellProps = {
 };
 
 export function AppShell({ children }: AppShellProps) {
+  return (
+    <Suspense fallback={children}>
+      <PathnameShell>{children}</PathnameShell>
+    </Suspense>
+  );
+}
+
+function PathnameShell({ children }: AppShellProps) {
   const pathname = usePathname();
 
   if (pathname === "/") {
