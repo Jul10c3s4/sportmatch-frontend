@@ -7,6 +7,7 @@ import { usePathname } from "next/navigation";
 
 const navigation = [
   { label: "Home", href: "/dashboard", icon: "home" },
+  { label: "Minhas competições", href: "/minhas-competicoes", icon: "trophy" },
   { label: "Pesquisar", href: "/pesquisa", icon: "search" },
   { label: "Notificações", href: "/notificacoes", icon: "bell" },
   { label: "Perfil", href: "/perfil", icon: "user" },
@@ -39,13 +40,46 @@ function Icon({ name }: { name: string }) {
         <circle cx="12" cy="8" r="4" />
       </svg>
     ),
+    trophy: (
+      <svg viewBox="0 0 24 24" width={size} height={size} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" aria-hidden="true">
+        <path d="M8 3h8v7a4 4 0 0 1-8 0V3Z" />
+        <path d="M8 5H5v3a4 4 0 0 0 4 4m7-7h3v3a4 4 0 0 1-4 4" />
+        <path d="M12 14v4m-4 3h8m-7-3h6" />
+      </svg>
+    ),
   };
 
   return icons[name] ?? null;
 }
 
+type TipoUsuario = "atleta" | "organizador" | "locador";
+
+function obterPerfilUsuario() {
+  if (typeof window === "undefined") {
+    return { email: "joao@sportmatch.com", tipoUsuario: "organizador" as TipoUsuario };
+  }
+
+  try {
+    const usuarioSalvo = window.localStorage.getItem("sportmatch-user");
+    if (!usuarioSalvo) {
+      return { email: "joao@sportmatch.com", tipoUsuario: "organizador" as TipoUsuario };
+    }
+
+    const usuario = JSON.parse(usuarioSalvo) as { email?: string; tipoUsuario?: TipoUsuario };
+
+    return {
+      email: usuario.email ?? "joao@sportmatch.com",
+      tipoUsuario: usuario.tipoUsuario ?? "organizador",
+    };
+  } catch {
+    return { email: "joao@sportmatch.com", tipoUsuario: "organizador" as TipoUsuario };
+  }
+}
+
 export function Sidebar() {
   const pathname = usePathname();
+  const perfil = obterPerfilUsuario();
+  const roleLabel = perfil.tipoUsuario === "organizador" ? "Organizador" : perfil.tipoUsuario === "locador" ? "Locador" : "Atleta";
 
   if (pathname === "/" || pathname === "/cadastro" || pathname === "/login") {
     return null;
@@ -67,7 +101,7 @@ export function Sidebar() {
 
         <nav aria-label="Menu principal" className="flex gap-1 overflow-x-auto md:mt-4 md:flex-col md:gap-1.5">
           {navigation.map(({ label, href, icon }) => {
-            const isActive = pathname === href || (href === "/dashboard" && pathname.startsWith("/dashboard"));
+            const isActive = pathname === href;
 
             return (
               <Link
@@ -91,11 +125,11 @@ export function Sidebar() {
 
       <div className="mt-5 hidden items-center gap-2 md:flex">
         <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,#f2d6b0,#8e5a2d)] text-xs font-semibold text-white">
-          JS
+          {perfil.email.slice(0, 2).toUpperCase()}
         </div>
         <div className="min-w-0">
           <p className="truncate text-[10px] font-semibold text-[#0b2f4f]">João Silva</p>
-          <p className="truncate text-[9px] text-[#475569]">Arapiraca, AL</p>
+          <p className="truncate text-[9px] text-[#475569]">{roleLabel}</p>
         </div>
       </div>
     </aside>

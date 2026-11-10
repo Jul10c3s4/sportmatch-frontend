@@ -69,6 +69,31 @@ export function CadastroUsuarioForm() {
                 <legend className="sr-only">Dados de cadastro do usuário</legend>
 
                 <div>
+                  <label htmlFor="tipoUsuario" className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#1f2937]">
+                    <span>Tipo de usuário</span>
+                    <span className="text-xs font-medium text-[#475569]">obrigatório</span>
+                  </label>
+                  <select
+                    id="tipoUsuario"
+                    defaultValue="atleta"
+                    aria-required="true"
+                    aria-invalid={Boolean(form.formState.errors.tipoUsuario)}
+                    aria-describedby={form.formState.errors.tipoUsuario ? "tipoUsuario-error" : undefined}
+                    {...form.register("tipoUsuario")}
+                    className="h-12 w-full rounded-xl border border-slate-200 bg-white px-3 text-sm text-slate-800 focus:border-[#f59e0b] focus:outline-none focus:ring-4 focus:ring-[#fcd7a5]"
+                  >
+                    <option value="atleta">Atleta</option>
+                    <option value="organizador">Organizador</option>
+                    <option value="locador">Locador</option>
+                  </select>
+                  {form.formState.errors.tipoUsuario ? (
+                    <p id="tipoUsuario-error" role="alert" className="mt-2 text-xs text-red-600">
+                      {form.formState.errors.tipoUsuario.message}
+                    </p>
+                  ) : null}
+                </div>
+
+                <div>
                   <label htmlFor="email" className="mb-2 flex items-center gap-2 text-sm font-semibold text-[#1f2937]">
                     <span>E-mail</span>
                   </label>

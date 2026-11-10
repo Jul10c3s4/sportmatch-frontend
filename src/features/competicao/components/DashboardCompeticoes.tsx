@@ -11,6 +11,33 @@ function obterCidade(cidadeCompleta: string): string {
   return cidadeCompleta.split(",").at(-1)?.replace(" - AL", "").trim() ?? cidadeCompleta;
 }
 
+function correspondeBusca(competicao: CompeticaoDetalhe, termo: string): boolean {
+  const texto = [
+    competicao.nome,
+    competicao.esporte,
+    competicao.modalidade,
+    competicao.categoria,
+    competicao.espacoEsportivo,
+    competicao.cidade,
+  ]
+    .join(" ")
+    .toLocaleLowerCase("pt-BR");
+
+  return texto.includes(termo.toLocaleLowerCase("pt-BR"));
+}
+
+function IconeSecao({ trofeu = false }: { trofeu?: boolean }) {
+  return trofeu ? (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 text-[#c2410c]" fill="currentColor">
+      <path d="M7 3h10v2h4v3a5 5 0 0 1-4.3 4.95A6 6 0 0 1 13 16.9V19h4v2H7v-2h4v-2.1a6 6 0 0 1-3.7-3.95A5 5 0 0 1 3 8V5h4V3Zm10 4v3.86A3 3 0 0 0 19 8V7h-2ZM5 7v1a3 3 0 0 0 2 2.86V7H5Z" />
+    </svg>
+  ) : (
+    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 text-[#c2410c]" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+      <path d="m5 12 4 4L19 6" />
+    </svg>
+  );
+}
+
 function IconeBusca() {
   return (
     <svg aria-hidden="true" viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor" strokeWidth="1.8">
@@ -27,33 +54,6 @@ function IconeNotificacao() {
       <path d="M10 21h4" />
     </svg>
   );
-}
-
-function IconeSecao({ trofeu = false }: { trofeu?: boolean }) {
-  return trofeu ? (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 text-[#c2410c]" fill="currentColor">
-      <path d="M7 3h10v2h4v3a5 5 0 0 1-4.3 4.95A6 6 0 0 1 13 16.9V19h4v2H7v-2h4v-2.1a6 6 0 0 1-3.7-3.95A5 5 0 0 1 3 8V5h4V3Zm10 4v3.86A3 3 0 0 0 19 8V7h-2ZM5 7v1a3 3 0 0 0 2 2.86V7H5Z" />
-    </svg>
-  ) : (
-    <svg aria-hidden="true" viewBox="0 0 24 24" className="h-5 w-5 text-[#c2410c]" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-      <path d="m5 12 4 4L19 6" />
-    </svg>
-  );
-}
-
-function correspondeBusca(competicao: CompeticaoDetalhe, termo: string): boolean {
-  const texto = [
-    competicao.nome,
-    competicao.esporte,
-    competicao.modalidade,
-    competicao.categoria,
-    competicao.espacoEsportivo,
-    competicao.cidade,
-  ]
-    .join(" ")
-    .toLocaleLowerCase("pt-BR");
-
-  return texto.includes(termo.toLocaleLowerCase("pt-BR"));
 }
 
 export function DashboardCompeticoes() {
@@ -81,9 +81,7 @@ export function DashboardCompeticoes() {
         <header className="mb-6 flex flex-wrap items-center justify-between gap-4">
           <div>
             <h1 className="text-xl font-bold sm:text-2xl">Olá, João Silva</h1>
-            <p className="mt-1 text-sm text-[#1f2937]">
-              Pronto para entrar em quadra hoje?
-            </p>
+            <p className="mt-1 text-sm text-[#1f2937]">Pronto para entrar em quadra hoje?</p>
           </div>
           <div className="flex items-center gap-2">
             <label className="relative block">
@@ -112,9 +110,7 @@ export function DashboardCompeticoes() {
         <section aria-labelledby="inscricoes-titulo" className="mb-7">
           <div className="mb-3 flex items-center gap-2">
             <IconeSecao />
-            <h2 id="inscricoes-titulo" className="text-base font-bold">
-              Minhas inscrições
-            </h2>
+            <h2 id="inscricoes-titulo" className="text-base font-bold">Minhas inscrições</h2>
           </div>
           {minhasInscricoes.length > 0 ? (
             <div className="grid grid-cols-[repeat(auto-fit,minmax(min(100%,210px),1fr))] gap-3.5">
@@ -144,11 +140,7 @@ export function DashboardCompeticoes() {
                 onChange={(event) => setCidadeSelecionada(event.target.value)}
                 className="min-h-11 rounded-lg bg-transparent py-2 pl-2 pr-8 text-sm text-[#1f2937] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]"
               >
-                {cidades.map((cidade) => (
-                  <option key={cidade} value={cidade}>
-                    {cidade}
-                  </option>
-                ))}
+                {cidades.map((cidade) => <option key={cidade} value={cidade}>{cidade}</option>)}
               </select>
             </label>
           </div>

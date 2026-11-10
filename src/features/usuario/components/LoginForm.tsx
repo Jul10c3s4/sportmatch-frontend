@@ -4,7 +4,10 @@ import Link from "next/link";
 
 import { LoginFields } from "@/features/usuario/components/LoginFields";
 import { useLogin } from "@/features/usuario/hooks/useLogin";
-import { credenciaisDemo } from "@/features/usuario/services/login.service";
+import {
+  credenciaisDemo,
+  credenciaisOrganizadorDemo,
+} from "@/features/usuario/services/login.service";
 
 export function LoginForm() {
   const {
@@ -26,7 +29,10 @@ export function LoginForm() {
         aqui você encontra as melhores rachas na sua região
       </p>
       <p className="mt-3 text-xs text-[#405466]">
-        Acesso de demonstração: {credenciaisDemo.email} / {credenciaisDemo.senha}
+        Acesso de demonstração: {credenciaisDemo.email} / {credenciaisDemo.senha} ({credenciaisDemo.tipoUsuario})
+      </p>
+      <p className="mt-1 text-xs text-[#405466]">
+        Organizador: {credenciaisOrganizadorDemo.email} / {credenciaisOrganizadorDemo.senha} ({credenciaisOrganizadorDemo.tipoUsuario})
       </p>
 
       <form className="mt-8 space-y-5" noValidate onSubmit={onSubmit}>

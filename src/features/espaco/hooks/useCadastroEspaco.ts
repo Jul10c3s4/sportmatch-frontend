@@ -31,7 +31,7 @@ export function useCadastroEspaco() {
     try {
       await espacoService.cadastrar(data);
       setFeedbackMessage("Espaço cadastrado com sucesso!");
-    } catch (error) {
+    } catch {
       setFeedbackMessage("Erro ao cadastrar o espaço. Tente novamente.");
     } finally {
       setIsSubmitting(false);

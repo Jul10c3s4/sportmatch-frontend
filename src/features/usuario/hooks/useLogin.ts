@@ -37,7 +37,10 @@ export function useLogin(): UseLoginResult {
 
   const onSubmit = form.handleSubmit((values) => {
     try {
-      autenticarUsuarioMock(values);
+      const usuario = autenticarUsuarioMock(values);
+      if (typeof window !== "undefined") {
+        window.localStorage.setItem("sportmatch-user", JSON.stringify(usuario));
+      }
       router.push("/dashboard");
     } catch (error: unknown) {
       const message =

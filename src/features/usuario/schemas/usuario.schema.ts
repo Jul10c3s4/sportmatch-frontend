@@ -14,6 +14,9 @@ export const usuarioSchema = z
       .min(8, "A senha deve ter no mínimo 8 caracteres.")
       .max(50, "A senha deve ter no máximo 50 caracteres."),
     confirmSenha: z.string().min(1, "Repita sua senha."),
+    tipoUsuario: z.enum(["atleta", "organizador", "locador"], {
+      errorMap: () => ({ message: "Selecione um tipo de usuário." }),
+    }),
   })
   .refine((data) => data.email === data.confirmEmail, {
     message: "Os e-mails não coincidem.",

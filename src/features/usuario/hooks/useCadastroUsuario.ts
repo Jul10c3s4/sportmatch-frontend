@@ -21,6 +21,7 @@ export function useCadastroUsuario() {
       confirmEmail: "",
       senha: "",
       confirmSenha: "",
+      tipoUsuario: "atleta",
     },
   });
 
@@ -30,10 +31,21 @@ export function useCadastroUsuario() {
         await criarUsuario({
           email: values.email,
           senha: values.senha,
+          tipoUsuario: values.tipoUsuario,
         });
 
+        if (typeof window !== "undefined") {
+          window.localStorage.setItem(
+            "sportmatch-user",
+            JSON.stringify({
+              email: values.email,
+              tipoUsuario: values.tipoUsuario,
+            }),
+          );
+        }
+
         form.reset();
-  router.push("/dashboard");
+        router.push("/dashboard");
       } catch (error: unknown) {
         const message =
           error instanceof Error ? error.message : "Não foi possível criar o usuário.";
