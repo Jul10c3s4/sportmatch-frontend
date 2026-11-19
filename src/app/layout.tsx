@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
 import { AppShell } from "@/components/ui/AppShell";
+import { InscricoesProvider } from "@/features/competicao/components/InscricoesProvider";
 import "./globals.css";
 
 const geistSans = Geist({
@@ -26,7 +27,9 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
       <body className="min-h-full bg-[#edf3f8] text-[#0f172a]">
-        <AppShell>{children}</AppShell>
+        <InscricoesProvider>
+          <AppShell>{children}</AppShell>
+        </InscricoesProvider>
       </body>
     </html>
   );

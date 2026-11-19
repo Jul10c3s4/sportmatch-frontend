@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 
 import { CompeticaoCard } from "@/features/competicao/components/CompeticaoCard";
-import { competicoesMock } from "@/features/competicao/services/competicoes.mock";
+import { useInscricoes } from "@/features/competicao/hooks/useInscricoes";
 import type { CompeticaoDetalhe } from "@/features/competicao/types/competicaoDetalhe";
 
 function obterCidade(cidadeCompleta: string): string {
@@ -57,19 +57,20 @@ function correspondeBusca(competicao: CompeticaoDetalhe, termo: string): boolean
 }
 
 export function DashboardCompeticoes() {
+  const { competicoes } = useInscricoes();
   const cidades = useMemo(
-    () => Array.from(new Set(competicoesMock.map((competicao) => obterCidade(competicao.cidade)))),
-    [],
+    () => Array.from(new Set(competicoes.map((competicao) => obterCidade(competicao.cidade)))),
+    [competicoes],
   );
   const [busca, setBusca] = useState("");
   const [cidadeSelecionada, setCidadeSelecionada] = useState(
     cidades.includes("Arapiraca") ? "Arapiraca" : (cidades[0] ?? ""),
   );
   const termo = busca.trim();
-  const minhasInscricoes = competicoesMock.filter((competicao) =>
+  const minhasInscricoes = competicoes.filter((competicao) =>
     correspondeBusca(competicao, termo),
   );
-  const competicoesLocais = competicoesMock.filter(
+  const competicoesLocais = competicoes.filter(
     (competicao) =>
       obterCidade(competicao.cidade) === cidadeSelecionada &&
       correspondeBusca(competicao, termo),
