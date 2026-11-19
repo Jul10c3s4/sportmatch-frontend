@@ -1,6 +1,9 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
 
+import { useInscricoes } from "@/features/competicao/hooks/useInscricoes";
 import { buscarCompeticaoMock } from "@/features/competicao/services/competicoes.mock";
 import type { CompeticaoDetalhe } from "@/features/competicao/types/competicaoDetalhe";
 
@@ -62,7 +65,9 @@ function CardCronograma({ competicao }: { competicao: CompeticaoDetalhe }) {
 }
 
 export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }) {
-  const competicao = buscarCompeticaoMock(competicaoId);
+  const { competicoes, inscricoesAtleta, inscrever, cancelarInscricao } = useInscricoes();
+  const competicao = competicoes.find(({ id }) => id === competicaoId)
+    ?? buscarCompeticaoMock(competicaoId);
 
   if (!competicao) {
     return (
@@ -85,6 +90,9 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
     );
   }
 
+  const atletaInscrito = inscricoesAtleta.includes(competicao.id);
+  const inscricoesEsgotadas = competicao.atletasInscritos >= competicao.limiteAtletas;
+
   return (
     <main className="min-h-screen bg-[#e7edf1] px-4 py-6 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-6xl">
@@ -102,7 +110,10 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
             </h1>
           </div>
           <div className="flex items-center gap-3 text-sm font-semibold">
-            <span className="rounded-full bg-[#fef3c7] px-3 py-2 text-[#713f12]">
+            <span
+              aria-label={`${competicao.atletasInscritos} de ${competicao.limiteAtletas} atletas inscritos`}
+              className="rounded-full bg-[#fef3c7] px-3 py-2 text-[#713f12]"
+            >
               {competicao.atletasInscritos}/{competicao.limiteAtletas} atletas
             </span>
             <span className="text-[#166534]">
@@ -174,17 +185,27 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
           </div>
         </div>
 
+        {inscricoesEsgotadas && !atletaInscrito && (
+          <p role="status" className="mt-6 rounded-lg bg-[#fff1f2] px-4 py-3 text-center text-sm font-semibold text-[#9f1239]">
+            Este evento já está com todas as inscrições preenchidas.
+          </p>
+        )}
         <button
           type="button"
-          disabled
-          aria-label="Inscreva-se na competição. Inscrições on-line disponíveis em breve."
-          className="mt-6 min-h-12 w-full cursor-not-allowed rounded-lg bg-[#c2410c] px-5 font-semibold text-white opacity-90"
+          disabled={!atletaInscrito && inscricoesEsgotadas}
+          onClick={() =>
+            atletaInscrito
+              ? cancelarInscricao(competicao.id)
+              : inscrever(competicao.id)
+          }
+          className="mt-6 min-h-12 w-full rounded-lg bg-[#c2410c] px-5 font-semibold text-white hover:bg-[#9a3412] focus-visible:outline-none focus-visible:ring-4 focus-visible:ring-orange-200 disabled:cursor-not-allowed disabled:bg-[#64748b] disabled:hover:bg-[#64748b]"
         >
-          Inscreva-se na Competição
+          {atletaInscrito
+            ? "Cancelar inscrição"
+            : inscricoesEsgotadas
+              ? "Inscrições esgotadas"
+              : "Inscreva-se na Competição"}
         </button>
-        <p className="mt-2 text-center text-sm text-[#475569]">
-          Inscrições on-line disponíveis em breve.
-        </p>
       </div>
     </main>
   );

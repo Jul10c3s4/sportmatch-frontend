@@ -1,6 +1,7 @@
 import Image from "next/image";
 import Link from "next/link";
 
+import { useInscricoes } from "@/features/competicao/hooks/useInscricoes";
 import type { CompeticaoDetalhe } from "@/features/competicao/types/competicaoDetalhe";
 
 type CompeticaoCardProps = {
@@ -58,6 +59,9 @@ function formatarData(data: string): string {
 }
 
 export function CompeticaoCard({ competicao }: CompeticaoCardProps) {
+  const { inscricoesAtleta, inscrever, cancelarInscricao } = useInscricoes();
+  const atletaInscrito = inscricoesAtleta.includes(competicao.id);
+  const inscricoesEsgotadas = competicao.atletasInscritos >= competicao.limiteAtletas;
   const valor = competicao.valorInscricao === 0
     ? "Gratuito"
     : `R$ ${competicao.valorInscricao.toFixed(2).replace(".", ",")}`;
@@ -77,7 +81,10 @@ export function CompeticaoCard({ competicao }: CompeticaoCardProps) {
             sizes="(max-width: 640px) 100vw, (max-width: 1100px) 35vw, 25vw"
             className="object-cover transition-transform duration-200 group-hover:scale-[1.02]"
           />
-          <span className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold text-[#0b2f4f]">
+          <span
+            aria-label={`${competicao.atletasInscritos} de ${competicao.limiteAtletas} atletas inscritos`}
+            className="absolute right-2 top-2 inline-flex items-center gap-1 rounded-full bg-white/90 px-2 py-1 text-[10px] font-semibold text-[#0b2f4f]"
+          >
             <IconeInfo tipo="participantes" />
             {competicao.atletasInscritos}/{competicao.limiteAtletas}
           </span>
@@ -124,6 +131,27 @@ export function CompeticaoCard({ competicao }: CompeticaoCardProps) {
           <span aria-hidden="true" className="text-sm text-[#c2410c]">→</span>
         </span>
       </Link>
+      {inscricoesEsgotadas && !atletaInscrito && (
+        <p className="mt-1 text-xs font-semibold text-[#9f1239]">
+          Todas as inscrições estão preenchidas.
+        </p>
+      )}
+      <button
+        type="button"
+        disabled={!atletaInscrito && inscricoesEsgotadas}
+        onClick={() =>
+          atletaInscrito
+            ? cancelarInscricao(competicao.id)
+            : inscrever(competicao.id)
+        }
+        className="mt-1 min-h-11 w-full rounded-md bg-[#c2410c] px-3 text-xs font-semibold text-white hover:bg-[#9a3412] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:bg-[#64748b] disabled:hover:bg-[#64748b]"
+      >
+        {atletaInscrito
+          ? "Cancelar inscrição"
+          : inscricoesEsgotadas
+            ? "Inscrições esgotadas"
+            : "Inscrever-se"}
+      </button>
     </article>
   );
 }

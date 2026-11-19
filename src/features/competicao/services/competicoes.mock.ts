@@ -11,7 +11,7 @@ export const competicoesMock: CompeticaoDetalhe[] = [
     formato: "Eliminatória simples",
     nivelAcessibilidade: "Adaptado para deficiência visual",
     atletasPorEquipe: { maximo: 4, minimo: 2 },
-    atletasInscritos: 12,
+    atletasInscritos: 20,
     limiteAtletas: 20,
     valorInscricao: 20,
     espacoEsportivo: "Quadra do Sagrada Família",
