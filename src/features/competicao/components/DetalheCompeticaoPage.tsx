@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex -- Content headings and rows are focus stops for sequential screen-reader access. */
 "use client";
 
 import Image from "next/image";
@@ -9,7 +10,10 @@ import type { CompeticaoDetalhe } from "@/features/competicao/types/competicaoDe
 
 function LinhaDetalhe({ rotulo, valor }: { rotulo: string; valor: string }) {
   return (
-    <div className="flex flex-wrap gap-x-2 gap-y-1 text-sm leading-6">
+    <div
+      tabIndex={0}
+      className="flex flex-wrap gap-x-2 gap-y-1 text-sm leading-6 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2"
+    >
       <dt className="font-bold text-[#0b2f4f]">{rotulo}:</dt>
       <dd className="text-[#475569]">{valor}</dd>
     </div>
@@ -36,12 +40,17 @@ function CardCronograma({ competicao }: { competicao: CompeticaoDetalhe }) {
       aria-labelledby="cronograma-titulo"
       className="rounded-2xl border border-[#d7e0e8] bg-white p-5 shadow-sm"
     >
-      <h2 id="cronograma-titulo" className="mb-5 text-lg font-bold text-[#0b2f4f]">
+      <h2 id="cronograma-titulo" tabIndex={0} className="mb-5 text-lg font-bold text-[#0b2f4f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2">
         Cronograma
       </h2>
       <ol className="space-y-4">
         {etapas.map((etapa) => (
-          <li key={etapa.titulo} className="flex items-start gap-3">
+          <li
+            key={etapa.titulo}
+            aria-label={`${etapa.titulo}: ${etapa.data}`}
+            tabIndex={0}
+            className="flex items-start gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2"
+          >
             <span
               aria-hidden="true"
               className={[
@@ -97,7 +106,7 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
     <main className="min-h-screen bg-[#e7edf1] px-4 py-6 sm:px-8 lg:px-10">
       <div className="mx-auto max-w-6xl">
         <header className="mb-5 flex flex-wrap items-center justify-between gap-4">
-          <div className="flex items-center gap-3">
+          <div className="order-1 flex items-center gap-3">
             <Link
               href="/dashboard"
               aria-label="Voltar ao dashboard"
@@ -109,11 +118,12 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
               {competicao.nome}
             </h1>
           </div>
-          <div className="flex items-center gap-3 text-sm font-semibold">
-            <span
-              aria-label={`${competicao.atletasInscritos} de ${competicao.limiteAtletas} atletas inscritos`}
-              className="rounded-full bg-[#fef3c7] px-3 py-2 text-[#713f12]"
-            >
+          <div
+            tabIndex={0}
+            aria-label={`Resumo da competição: ${competicao.atletasInscritos} de ${competicao.limiteAtletas} atletas inscritos. Valor: ${competicao.valorInscricao === 0 ? "gratuito" : `R$ ${competicao.valorInscricao.toFixed(2).replace(".", ",")}`}.`}
+            className="order-2 flex items-center gap-3 text-sm font-semibold sm:order-2 sm:ml-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2"
+          >
+            <span className="rounded-full bg-[#fef3c7] px-3 py-2 text-[#713f12]">
               {competicao.atletasInscritos}/{competicao.limiteAtletas} atletas
             </span>
             <span className="text-[#166534]">
@@ -144,7 +154,7 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
             aria-labelledby="detalhes-evento"
             className="rounded-2xl border border-[#d7e0e8] bg-white p-5 shadow-sm sm:p-6"
           >
-            <h2 id="detalhes-evento" className="mb-4 flex items-center gap-3 text-lg font-bold text-[#0b2f4f]">
+            <h2 id="detalhes-evento" tabIndex={0} className="mb-4 flex items-center gap-3 text-lg font-bold text-[#0b2f4f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2">
               <span aria-hidden="true" className="h-4 w-4 rounded-sm bg-[#c2410c]" />
               Detalhes do Evento
             </h2>
@@ -165,14 +175,15 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
               aria-labelledby="local-evento"
               className="overflow-hidden rounded-2xl border border-[#d7e0e8] bg-white p-5 shadow-sm"
             >
-              <h2 id="local-evento" className="mb-3 text-base font-bold text-[#0b2f4f]">
+              <h2 id="local-evento" aria-label={`Localização da competição: ${competicao.espacoEsportivo}`} tabIndex={0} className="mb-3 text-base font-bold text-[#0b2f4f] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2">
                 <span aria-hidden="true" className="mr-2 text-[#c2410c]">●</span>
                 {competicao.espacoEsportivo}
               </h2>
               <div
                 role="img"
-                aria-label={`Mapa ilustrativo de ${competicao.cidade}`}
-                className="relative h-24 overflow-hidden rounded-xl bg-[#eaf0e8]"
+                aria-label={`Localização da competição: mapa ilustrativo. Endereço: ${competicao.endereco}, ${competicao.cidade}`}
+                tabIndex={0}
+                className="relative h-24 overflow-hidden rounded-xl bg-[#eaf0e8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2"
               >
                 <div aria-hidden="true" className="absolute inset-0 bg-[linear-gradient(110deg,transparent_40%,#cbd5e1_41%,#cbd5e1_47%,transparent_48%),linear-gradient(20deg,transparent_32%,#fff_33%,#fff_39%,transparent_40%),linear-gradient(90deg,transparent_58%,#cbd5e1_59%,#cbd5e1_65%,transparent_66%)]" />
                 <span aria-hidden="true" className="absolute left-1/2 top-1/2 flex h-8 w-8 -translate-x-1/2 -translate-y-1/2 items-center justify-center rounded-full bg-[#c2410c] text-sm font-bold text-white shadow">●</span>
@@ -192,6 +203,7 @@ export function DetalheCompeticaoPage({ competicaoId }: { competicaoId: string }
         )}
         <button
           type="button"
+          aria-label={`${atletaInscrito ? "Cancelar inscrição" : inscricoesEsgotadas ? "Inscrições esgotadas" : "Inscrever-se"} na competição ${competicao.nome}`}
           disabled={!atletaInscrito && inscricoesEsgotadas}
           onClick={() =>
             atletaInscrito

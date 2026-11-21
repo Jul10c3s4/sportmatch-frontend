@@ -1,5 +1,7 @@
+/* eslint-disable jsx-a11y/no-noninteractive-tabindex -- The card itself is a named focus stop for screen-reader users. */
 import Image from "next/image";
 import Link from "next/link";
+import { useId } from "react";
 
 import { useInscricoes } from "@/features/competicao/hooks/useInscricoes";
 import type { CompeticaoDetalhe } from "@/features/competicao/types/competicaoDetalhe";
@@ -59,6 +61,7 @@ function formatarData(data: string): string {
 }
 
 export function CompeticaoCard({ competicao }: CompeticaoCardProps) {
+  const nomeId = useId();
   const { inscricoesAtleta, inscrever, cancelarInscricao } = useInscricoes();
   const atletaInscrito = inscricoesAtleta.includes(competicao.id);
   const inscricoesEsgotadas = competicao.atletasInscritos >= competicao.limiteAtletas;
@@ -67,10 +70,14 @@ export function CompeticaoCard({ competicao }: CompeticaoCardProps) {
     : `R$ ${competicao.valorInscricao.toFixed(2).replace(".", ",")}`;
 
   return (
-    <article className="overflow-hidden rounded-lg bg-white p-2 shadow-sm">
+    <article
+      aria-labelledby={nomeId}
+      tabIndex={0}
+      className="rounded-lg bg-white p-2 shadow-sm focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c] focus-visible:ring-offset-2"
+    >
       <Link
         href={`/competicoes/${competicao.id}`}
-        aria-label={`Ver detalhes de ${competicao.nome}`}
+        aria-label={`Ver detalhes da competição ${competicao.nome}`}
         className="group block rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#c2410c]"
       >
         <div className="relative h-28 overflow-hidden rounded-md sm:h-32">
@@ -91,7 +98,7 @@ export function CompeticaoCard({ competicao }: CompeticaoCardProps) {
         </div>
 
         <div className="mt-2 flex items-start justify-between gap-2">
-          <h3 className="line-clamp-1 text-sm font-semibold text-[#0b2f4f] group-hover:text-[#9a3412]">
+          <h3 id={nomeId} className="line-clamp-1 text-sm font-semibold text-[#0b2f4f] group-hover:text-[#9a3412]">
             {competicao.nome}
           </h3>
           <span className="shrink-0 rounded-full bg-[#e8f0ea] px-2 py-1 text-[9px] font-medium text-[#24543b]">
@@ -138,6 +145,7 @@ export function CompeticaoCard({ competicao }: CompeticaoCardProps) {
       )}
       <button
         type="button"
+        aria-label={`${atletaInscrito ? "Cancelar inscrição" : inscricoesEsgotadas ? "Inscrições esgotadas" : "Inscrever-se"} na competição ${competicao.nome}`}
         disabled={!atletaInscrito && inscricoesEsgotadas}
         onClick={() =>
           atletaInscrito
