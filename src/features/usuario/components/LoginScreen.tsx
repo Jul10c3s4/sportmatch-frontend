@@ -22,7 +22,9 @@ export function LoginScreen() {
         </p>
       </section>
 
-      <section className="flex min-h-[calc(100vh-240px)] items-center justify-center bg-[#e5ebef] px-6 py-12 sm:px-10 md:min-h-screen lg:px-12">
+      <section 
+        aria-label="Formulário de login"
+        className="flex min-h-[calc(100vh-240px)] items-center justify-center bg-[#e5ebef] px-6 py-12 sm:px-10 md:min-h-screen lg:px-12">
         <LoginForm />
       </section>
     </main>
